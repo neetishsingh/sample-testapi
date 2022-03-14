@@ -5,6 +5,8 @@
 */
 //custom route for fetching data
 var transactions = require('../data_access/transaction');
+const firebaseverifytok = require('../utility/firebaseverifytok');
+var FirebaseVerifyTok=require('../utility/firebaseverifytok');
 
 module.exports = {
     //set up route configuration that will be handle by express server
@@ -21,7 +23,18 @@ module.exports = {
         app.get('/api/transactions/:id/', function (req, res) {
             transactions.getTransactionById(req.params.id, res);
         });
+        app.get('/api/createtoken',function(req,res){
 
+            firebaseverifytok.createToken(res);
+            
+        });
+        app.get('/api/verifytoken/:id/',function(req,res){
+
+            firebaseverifytok.verifyFBToken(req.params.id,res);
+            
+        });
+
+        //verifyFBToken
     }
 
 };
