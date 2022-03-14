@@ -1,11 +1,15 @@
 const { initializeApp } = require('firebase-admin/app');
 const { getAuth } = require('firebase-admin/auth');
 
+//import { signInWithCustomToken } = require('firebase-admin/auth');
+
+
 const admin = require('firebase-admin');
 
 
 function FirebaseVerifyTok() {
     var serviceAccount = require("../assetsfile/traderex-aaab1-firebase-adminsdk-5eb4u-2c116294ab.json");
+    
 
     initializeApp({
       credential: admin.credential.cert(serviceAccount),
@@ -25,6 +29,7 @@ function FirebaseVerifyTok() {
         console.log(customToken);
         
         res.send(customToken);
+    
       })
       .catch((error) => {
         console.log('Error creating custom token:', error);
@@ -34,17 +39,32 @@ function FirebaseVerifyTok() {
   };
 
   this.verifyFBToken=function(token,res){
-    getAuth()
-    .verifyIdToken(token)
-    .then((decodedToken) => {
-      const uid = decodedToken.uid;
-      console.log(uid);
+    const auth = getAuth();
+    require('firebase-admin/auth')  
+     signInWithCustomToken(auth, token)
+  .then((userCredential) => {
+    // Signed in
+    const user = userCredential.user;
+    res.send(user);
+    // ...
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    // ...
+  });
+
+  //  getAuth()
+  //  .verifyIdToken(token)
+  //  .then((decodedToken) => {
+  //    const uid = decodedToken.uid;
+  //    console.log(uid);
       // ...
-    })
-    .catch((error) => {
+   // })
+   // .catch((error) => {
       // Handle error
-      console.log(error);
-    });
+   //   console.log(error);
+  //  });
     res.send("ddd");
 
   };
