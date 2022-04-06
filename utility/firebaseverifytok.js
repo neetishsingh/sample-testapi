@@ -13,7 +13,7 @@ function FirebaseVerifyTok() {
 
     initializeApp({
       credential: admin.credential.cert(serviceAccount),
-      databaseURL: "firebase-adminsdk-5eb4u@traderex-aaab1.iam.gserviceaccount.com"
+      databaseURL: "firebase-adminsdk-y9lnw@covidhelp-68308.iam.gserviceaccount.com"
     });
 
   //  const { initializeApp } = require("firebase-admin/app");
@@ -39,20 +39,31 @@ function FirebaseVerifyTok() {
   };
 
   this.verifyFBToken=function(token,res){
-    const auth = getAuth();
-    require('firebase-admin/auth')  
-     signInWithCustomToken(auth, token)
-  .then((userCredential) => {
-    // Signed in
-    const user = userCredential.user;
-    res.send(user);
+
+    getAuth()
+  .verifyIdToken(token)
+  .then((decodedToken) => {
+    const uid = decodedToken.uid;
+    res.send(uid);
     // ...
   })
   .catch((error) => {
+    // Handle error
+    
     const errorCode = error.code;
     const errorMessage = error.message;
-    // ...
+    console.log(errorCode+errorMessage);
   });
+
+   /* const auth = getAuth();
+    auth.signInWithCustomToken()
+    auth.signInWithCustomToken(auth, token).then((userCredential) => {
+    // Signed in
+    const user = userCredential.user;*/
+    //res.send(user);
+    // ...
+  
+  
 
   //  getAuth()
   //  .verifyIdToken(token)
